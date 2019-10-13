@@ -13,7 +13,7 @@ namespace SPAMVC.Controllers
         {
             WeatherForecast.Forecast Forecast = new WeatherForecast.Forecast();
             WeatherCurrent.Current Current = new WeatherCurrent.Current();
-            string apiKey = "7d0c4218af149a91db5cb98ba3a3d22e";// Ключ доступа к http://api.openweathermap.org
+            string apiKey = "";// Ключ доступа к http://api.openweathermap.org
             try
             {
                 /* Создаем запрос к Weather Open Api, используя название города cityName  и коюч доступа apiKey для получения прогноза погоды на 5 дней*/
