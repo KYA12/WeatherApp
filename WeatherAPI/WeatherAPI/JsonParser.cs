@@ -13,7 +13,7 @@ namespace WeatherAPI
         {
             CityList weather = new CityList();
             weather.list = new List<List>();
-            string apiKey = "7d0c4218af149a91db5cb98ba3a3d22e";
+            string apiKey = "";//Your API key
             try
             {
                 HttpWebRequest apiRequest = WebRequest.Create("http://api.openweathermap.org/data/2.5/forecast?q=" + name + "&appid=" + apiKey + "&units=metric") as HttpWebRequest;
