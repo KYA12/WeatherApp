@@ -3,6 +3,7 @@ using System.Data;
 using WeatherAPI;
 using DAL;
 using WeatherAppWinForms;
+using System.Threading.Tasks;
 
 namespace BL
 {
@@ -76,9 +77,9 @@ namespace BL
             return city;
         }
 
-        public bool EditDB(CityData city)
+        public async Task<bool> EditDB(CityData city)
         {
-            bool result = dataAccess.EditCityData(city);
+            bool result = await dataAccess.EditCityData(city);
             return result;
         }
     }

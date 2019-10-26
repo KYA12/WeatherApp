@@ -2,6 +2,7 @@ using System;
 using System.Windows.Forms;
 using System.Globalization;
 using BL;
+using System.Threading.Tasks;
 
 namespace WeatherAppWinForms
 {
@@ -38,7 +39,7 @@ namespace WeatherAppWinForms
             }
         }
 
-        private void btnForecast_Click(object sender, EventArgs e)
+        private async void btnForecast_ClickAsync(object sender, EventArgs e)
         {
             bool isRain = false;
             listView1.Items.Clear();
@@ -112,7 +113,7 @@ namespace WeatherAppWinForms
                         {
                             MessageBox.Show("It will rain soon!");
                         }
-                        bool result = converter.EditDB(cityData);
+                        bool result = await converter.EditDB(cityData);
                         if (!result)
                         {
                             MessageBox.Show("Error");

@@ -81,7 +81,7 @@
             this.btnForecast.TabIndex = 16;
             this.btnForecast.Text = "Forecast";
             this.btnForecast.UseVisualStyleBackColor = true;
-            this.btnForecast.Click += new System.EventHandler(this.btnForecast_Click);
+            this.btnForecast.Click += new System.EventHandler(this.btnForecast_ClickAsync);
             // 
             // label3
             // 

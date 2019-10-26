@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using WeatherAppWinForms;
 
@@ -18,7 +19,7 @@ namespace DAL
             return sql;
         }
 
-        public static bool ExecuteNonQuery(string strSQL,
+        public static async Task<bool> ExecuteNonQueryAsync(string strSQL,
            CommandType cmdType, params SqlParameter[] paramList)
         {
             bool result;
@@ -28,8 +29,8 @@ namespace DAL
             cmd.Parameters.AddRange(paramList);
             try
             {
-                cnn.Open();
-                result = cmd.ExecuteNonQuery() > 0;
+                await cnn.OpenAsync();
+                result = await cmd.ExecuteNonQueryAsync() > 0;
             }
             catch (Exception ex)
             {
@@ -64,7 +65,7 @@ namespace DAL
             return dt;
         }
        
-        public bool EditCityData(CityData data)
+        public async Task<bool> EditCityData(CityData data)
         {
             bool check = false;
             try
@@ -75,7 +76,7 @@ namespace DAL
                 SqlParameter Id = new SqlParameter("@ID", data.Id);
                 SqlParameter Name = new SqlParameter("@name", data.CityName);
                 SqlParameter RainTime = new SqlParameter("@raintime", startTime.DayOfWeek.ToString());
-                check = DataAccess.ExecuteNonQuery(sql, CommandType.Text, Id, Name, RainTime);
+                check = await DataAccess.ExecuteNonQueryAsync(sql, CommandType.Text, Id, Name, RainTime);
             }
             catch
             {
