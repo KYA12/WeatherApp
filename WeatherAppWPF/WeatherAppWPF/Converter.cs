@@ -7,7 +7,7 @@ namespace WeatherAppWPF
         public CityData Convert(string name)
         {
             JsonParser jsonParser = new JsonParser();
-            CityList cityList  = new CityList();
+            CityList cityList;
             CityData cityData = new CityData();
             cityList = jsonParser.Parsing(name);
             if (cityList == null)

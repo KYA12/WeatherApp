@@ -7,12 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Configuration;
+using System.Threading.Tasks;
 
 namespace WeatherAppWPF 
 {
     public class DataAccess
     {
-        public static string getConnectionString()
+        public static string GetConnectionString()
         {
             string sql = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\\WeatherAPIDB.mdf;Integrated Security=True;MultipleActiveResultSets=True;";
             return sql;
@@ -22,45 +23,55 @@ namespace WeatherAppWPF
            CommandType cmdType, params SqlParameter[] paramList)
         {
             bool result;
-            SqlConnection cnn = new SqlConnection(getConnectionString());
-            SqlCommand cmd = new SqlCommand(strSQL, cnn);
-            cmd.CommandType = cmdType;
-            cmd.Parameters.AddRange(paramList);
-            try
+            SqlConnection cnn = new SqlConnection(GetConnectionString());
+            using (SqlCommand cmd = new SqlCommand(strSQL, cnn))
             {
-                cnn.Open();
-                result = cmd.ExecuteNonQuery() > 0;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message.ToString());
-                throw new Exception("Error : " + ex.Message);
-            }
-            finally
-            {
-                cnn.Close();
-            }
-            return result;
+                cmd.CommandType = cmdType;
+                cmd.Parameters.AddRange(paramList);
+                try
+                {
+                    cnn.Open();
+                    result = cmd.ExecuteNonQuery() > 0;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message.ToString());
+                    throw new Exception("Error : " + ex.Message);
+                }
+                finally
+                {
+                    cnn.Close();
+                }
+                return result;
+            } 
+           
         }
 
         public static DataTable ExecuteQueryWithDataTable(string strSQL, CommandType cmdType,
           params SqlParameter[] param)
         {
-            SqlConnection cnn = new SqlConnection(getConnectionString());
-            SqlCommand cmd = new SqlCommand(strSQL, cnn);
-            cmd.CommandType = cmdType;
-            if (param != null)
-                cmd.Parameters.AddRange(param);
-            SqlDataAdapter da = new SqlDataAdapter(cmd);
-            DataTable dt = new DataTable();
-            da.Fill(dt);
-            return dt;
+            using (SqlConnection cnn = new SqlConnection(GetConnectionString())) 
+            {
+                using (SqlCommand cmd = new SqlCommand(strSQL, cnn))
+                {
+                    cmd.CommandType = cmdType;
+                    if (param != null)
+                        cmd.Parameters.AddRange(param);
+                    using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                    {
+                        DataTable dt = new DataTable();
+                        da.Fill(dt);
+                        return dt;
+                    }
+                }
+               
+            } 
         }
   
         public DataTable GetCityData()
         {
             string sql = "SELECT CityData.Id, CityData.CityName, CityData.RainTime from CityData";
-            DataTable dt = DataAccess.ExecuteQueryWithDataTable(sql, CommandType.Text);
+            DataTable dt = ExecuteQueryWithDataTable(sql, CommandType.Text);
             return dt;
         }
        
@@ -75,7 +86,7 @@ namespace WeatherAppWPF
                 SqlParameter Id = new SqlParameter("@ID", data.Id);
                 SqlParameter Name = new SqlParameter("@name", data.CityName);
                 SqlParameter RainTime = new SqlParameter("@raintime", startTime.DayOfWeek.ToString());
-                check = DataAccess.ExecuteNonQuery(sql, CommandType.Text, Id, Name, RainTime);
+                check = ExecuteNonQuery(sql, CommandType.Text, Id, Name, RainTime);
             }
             catch
             {

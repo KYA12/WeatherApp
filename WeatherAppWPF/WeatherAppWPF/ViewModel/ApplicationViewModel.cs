@@ -11,37 +11,38 @@ namespace WeatherAppWPF
     public class ApplicationViewModel: INotifyPropertyChanged
     {
         private City selectedCity;
-        DataAccess dataAccess = new DataAccess();
-        CityData cityData = new CityData();
-        Converter converter = new Converter();
-
+        private readonly DataAccess dataAccess = new DataAccess();
+        private readonly CityData cityData = new CityData();
+        private readonly Converter converter = new Converter();
+        
         public void FillData(DataRow row, CityData citydata)
         {
             DateTime initTime = DateTime.Parse(citydata.RainTime[0],
                               null, DateTimeStyles.AssumeUniversal);
             string day = initTime.DayOfWeek.ToString();
-
-            string dayFromDB = row["RainTime"].ToString().Trim();
+           
             if (row["RainTime"].ToString().Trim() == day)
             {
                 for (int i = 0; i < 8; i++)
                 {
                     DateTime time = DateTime.Parse(citydata.RainTime[i],
                               null, DateTimeStyles.AssumeUniversal);
-                    City cityinfo = new City();
-                    cityinfo.Id = citydata.Id;
-                    cityinfo.CityName = citydata.CityName;
-                    cityinfo.CountryName = citydata.CountryName;
-                    cityinfo.Latitude = citydata.Latitude;
-                    cityinfo.Longtitude = citydata.Longtitude;
-                    cityinfo.Temp = citydata.Temp[i];
-                    cityinfo.MaxTemp = citydata.MaxTemp[i];
-                    cityinfo.MinTemp = citydata.MinTemp[i];
-                    cityinfo.RainTime = time.DayOfWeek.ToString();
-                    cityinfo.Main = citydata.Main[i];
-                    cityinfo.RainIn3H = citydata.RainIn3H[i];
-                    cityinfo.Description = citydata.Description[i];
-                    cityinfo.Time = time.ToShortTimeString();
+                    City cityinfo = new City
+                    {
+                        Id = citydata.Id,
+                        CityName = citydata.CityName,
+                        CountryName = citydata.CountryName,
+                        Latitude = citydata.Latitude,
+                        Longtitude = citydata.Longtitude,
+                        Temp = citydata.Temp[i],
+                        MaxTemp = citydata.MaxTemp[i],
+                        MinTemp = citydata.MinTemp[i],
+                        RainTime = time.DayOfWeek.ToString(),
+                        Main = citydata.Main[i],
+                        RainIn3H = citydata.RainIn3H[i],
+                        Description = citydata.Description[i],
+                        Time = time.ToShortTimeString()
+                    };
                     Cities.Add(cityinfo);
                 }
             }
@@ -52,20 +53,22 @@ namespace WeatherAppWPF
                 {
                     DateTime time = DateTime.Parse(citydata.RainTime[i],
                               null, DateTimeStyles.AssumeUniversal);
-                    City cityinfo = new City();
-                    cityinfo.Id = citydata.Id;
-                    cityinfo.CityName = citydata.CityName;
-                    cityinfo.CountryName = citydata.CountryName;
-                    cityinfo.Latitude = citydata.Latitude;
-                    cityinfo.Longtitude = citydata.Longtitude;
-                    cityinfo.Temp = citydata.Temp[i];
-                    cityinfo.MaxTemp = citydata.MaxTemp[i];
-                    cityinfo.MinTemp = citydata.MinTemp[i];
-                    cityinfo.RainTime = time.DayOfWeek.ToString();
-                    cityinfo.Main = citydata.Main[i];
-                    cityinfo.RainIn3H = citydata.RainIn3H[i];
-                    cityinfo.Description = citydata.Description[i];
-                    cityinfo.Time = time.ToShortTimeString();
+                    City cityinfo = new City
+                    {
+                        Id = citydata.Id,
+                        CityName = citydata.CityName,
+                        CountryName = citydata.CountryName,
+                        Latitude = citydata.Latitude,
+                        Longtitude = citydata.Longtitude,
+                        Temp = citydata.Temp[i],
+                        MaxTemp = citydata.MaxTemp[i],
+                        MinTemp = citydata.MinTemp[i],
+                        RainTime = time.DayOfWeek.ToString(),
+                        Main = citydata.Main[i],
+                        RainIn3H = citydata.RainIn3H[i],
+                        Description = citydata.Description[i],
+                        Time = time.ToShortTimeString()
+                    };
                     Cities.Add(cityinfo);
                     if (cityinfo.RainIn3H != null)
                     {
@@ -139,7 +142,7 @@ namespace WeatherAppWPF
             DataTable tab = dataAccess.GetCityData();
             DataRow row = tab.Rows[0];
             cityData = converter.Convert(city);
-            if (String.IsNullOrEmpty(city))
+            if (string.IsNullOrEmpty(city))
             {
                 MessageBox.Show("Input name of city");
             }
@@ -172,8 +175,7 @@ namespace WeatherAppWPF
 
         public void OnPropertyChanged([CallerMemberName]string prop = "")
         {
-                if (PropertyChanged != null)
-                    PropertyChanged(this, new PropertyChangedEventArgs(prop));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }
     }
 }
