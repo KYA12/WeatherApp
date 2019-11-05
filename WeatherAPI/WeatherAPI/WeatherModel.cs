@@ -37,7 +37,7 @@ namespace WeatherAPI
 
     public class Coord
     {
-        public double Latitutde { get; set; }
+        public double Latitude { get; set; }
         public double Longntitude { get; set; }
     }
 

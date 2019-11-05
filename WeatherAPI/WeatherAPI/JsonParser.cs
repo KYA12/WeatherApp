@@ -12,10 +12,7 @@ namespace WeatherAPI
     {
         public static async Task<CityList> ParsingAsync(string name)
         {
-            CityList weather = new CityList
-            {
-                List = new List<List>()
-            };
+            CityList weather;
             string apiKey = "";//Your API key
             try
             {
