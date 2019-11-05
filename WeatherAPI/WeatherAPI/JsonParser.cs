@@ -8,12 +8,14 @@ using System.Threading.Tasks;
 
 namespace WeatherAPI
 {
-    public class JsonParser
+    public static class JsonParser
     {
-        public async Task<CityList> Parsing(string name)
+        public static async Task<CityList> ParsingAsync(string name)
         {
-            CityList weather = new CityList();
-            weather.list = new List<List>();
+            CityList weather = new CityList
+            {
+                List = new List<List>()
+            };
             string apiKey = "";//Your API key
             try
             {
@@ -21,8 +23,10 @@ namespace WeatherAPI
                 string apiResponse = "";
                 using (HttpWebResponse response = await apiRequest.GetResponseAsync() as HttpWebResponse)
                 {
-                    StreamReader reader = new StreamReader(response.GetResponseStream());
-                    apiResponse = await reader.ReadToEndAsync();
+                    using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+                    {
+                        apiResponse = await reader.ReadToEndAsync();
+                    }
                 }
                 weather = JsonConvert.DeserializeObject<CityList>(apiResponse);
             }
